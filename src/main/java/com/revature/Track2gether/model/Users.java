@@ -11,7 +11,9 @@ import java.util.Objects;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
 @Table(name="users",uniqueConstraints = @UniqueConstraint(columnNames= {"email","spouseId"}))
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class Users {
@@ -31,7 +33,7 @@ public class Users {
     @Column(name = "email",nullable = false)
     private String email;
 
-   @ToString.Exclude
+    @ToString.Exclude
     @OneToOne
     @JoinColumn(name = "spouseId")
     private Users spouseId;
