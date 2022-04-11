@@ -4,18 +4,23 @@ package com.revature.Track2gether.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.revature.Track2gether.dto.Transactiondto;
-import com.revature.Track2gether.model.Category;
-import com.revature.Track2gether.model.Transaction;
-import com.revature.Track2gether.model.Users;
+import com.revature.Track2gether.exception.BadParameterException;
+import com.revature.Track2gether.model.*;
 import com.revature.Track2gether.repositories.CategoryRepository;
+import com.revature.Track2gether.service.AuthenticationService;
+import com.revature.Track2gether.service.JwtService;
 import com.revature.Track2gether.service.TransactionService;
 import com.revature.Track2gether.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.jsonwebtoken.MalformedJwtException;
 
+
+import javax.security.auth.login.FailedLoginException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,6 +34,12 @@ import java.util.List;
 public class ProductionController {
 
     @Autowired
+    private AuthenticationService authService;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
     private UserService userservice;
 
     @Autowired
@@ -38,6 +49,40 @@ public class ProductionController {
     private CategoryRepository catrepo;
     Transactiondto dto = new Transactiondto();
     DateFormat df = new SimpleDateFormat("mm/dd/yyyy");
+
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO dto) throws JsonProcessingException {
+        try {
+            Users users = authService.login(dto.getEmail(), dto.getPassword());
+
+            String jwt = jwtService.createJwt(users);
+
+            HttpHeaders responseHeaders = new HttpHeaders   ();
+            responseHeaders.set("token", jwt);
+
+            return ResponseEntity.ok().headers(responseHeaders).body(users);
+        } catch (FailedLoginException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        } catch (BadParameterException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<?> test(@RequestHeader("Authorization") String headerValue) throws JsonProcessingException {
+        // Bearer <token>
+        String jwt = headerValue.split(" ")[1];
+
+        try {
+            UserJwtDto dto = jwtService.parseJwt(jwt);
+
+            return ResponseEntity.ok(dto);
+        } catch (MalformedJwtException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
+
+    }
 
     @PostMapping("/users/{userid}/transaction")
     public ResponseEntity<?> addTransaction(@PathVariable("userid") String userid, @RequestBody Transactiondto dto) throws ParseException {

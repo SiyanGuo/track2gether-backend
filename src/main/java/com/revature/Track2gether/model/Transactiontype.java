@@ -18,6 +18,5 @@ public class Transactiontype {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-
     private String type;
 }
