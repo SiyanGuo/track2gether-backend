@@ -27,7 +27,7 @@ public class TransactionServiceImp implements TransactionService {
     @Autowired
     private CategoryRepository catrepo;
 
-    DateFormat df = new SimpleDateFormat("mm/dd/yyyy");
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
 
     private Transactiondto convertTransentitytoDTO(Transaction t){
