@@ -1,13 +1,17 @@
 package com.revature.Track2gether.service;
 
+
 import com.revature.Track2gether.exception.BadParameterException;
+
+import com.revature.Track2gether.dto.SignUpDTO;
+
 import com.revature.Track2gether.model.Users;
 
 import java.util.List;
 
 public interface UserService {
 
-    public Users createUsers(Users user);
+    public SignUpDTO addUser(Users user);
 
     public Users getUserById(int id) throws BadParameterException;
 

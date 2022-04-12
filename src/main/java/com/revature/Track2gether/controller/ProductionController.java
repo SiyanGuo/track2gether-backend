@@ -3,9 +3,10 @@ package com.revature.Track2gether.controller;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.revature.Track2gether.dto.*;
+
 import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.revature.Track2gether.dto.Categorydto;
-import com.revature.Track2gether.dto.Transactiondto;
+
 import com.revature.Track2gether.exception.BadParameterException;
 import com.revature.Track2gether.model.*;
 import com.revature.Track2gether.repositories.CategoryRepository;
@@ -18,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.jsonwebtoken.MalformedJwtException;
@@ -54,6 +54,8 @@ public class ProductionController {
     @Autowired
     private CategoryRepository catrepo;
     Transactiondto dto = new Transactiondto();
+    UserResponseDTO udto = new UserResponseDTO();
+    SignUpDTO sdto = new SignUpDTO();
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
 
@@ -68,7 +70,18 @@ public class ProductionController {
             HttpHeaders responseHeaders = new HttpHeaders   ();
             responseHeaders.set("token", jwt);
 
-            return ResponseEntity.ok().headers(responseHeaders).body(users);
+            UserResponseDTO udto = new UserResponseDTO();
+
+            udto.setId(users.getId());
+            udto.setFirstName(users.getFirstname());
+            udto.setLastName(users.getLastname());
+            udto.setEmail(users.getEmail());
+            udto.setSpouseId(users.getSpouseId().getId());
+            udto.setSpouseFirstName(users.getSpouseId().getFirstname());
+            udto.setSpouseLastName(users.getSpouseId().getLastname());
+            udto.setSpouseEmail(users.getSpouseId().getEmail());
+
+            return ResponseEntity.ok().headers(responseHeaders).body(udto);
         } catch (FailedLoginException e) {
             return ResponseEntity.status(401).body(e.getMessage());
         } catch (BadParameterException e) {
@@ -82,6 +95,7 @@ public class ProductionController {
         String jwt = headerValue.split(" ")[1];
 
         try {
+
             UserJwtDto dto = jwtService.parseJwt(jwt);
 
             return ResponseEntity.ok(dto);
@@ -89,6 +103,20 @@ public class ProductionController {
             return ResponseEntity.status(401).body(e.getMessage());
         }
 
+    }
+
+    @PostMapping("/signUp")
+    public ResponseEntity<?> addUser(@RequestBody SignUpDTO sdto) throws ParseException {
+
+        Users userAdded = new Users();
+
+        userAdded.setFirstname(sdto.getFirstName());
+        userAdded.setLastname(sdto.getLastName());
+        userAdded.setEmail(sdto.getEmail());
+        userAdded.setPassword(sdto.getPassword());
+        userAdded.setSpouseId(sdto.getSpouseId());
+        sdto = userservice.addUser(userAdded);
+        return ResponseEntity.ok(sdto);
     }
 
     @PostMapping("/users/{userid}/transaction")
