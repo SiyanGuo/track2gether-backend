@@ -45,6 +45,7 @@ public class ProductionController {
     private CategoryRepository catrepo;
     Transactiondto dto = new Transactiondto();
     UserResponseDTO udto = new UserResponseDTO();
+    SignUpDTO sdto = new SignUpDTO();
     DateFormat df = new SimpleDateFormat("mm/dd/yyyy");
 
 
@@ -91,6 +92,20 @@ public class ProductionController {
             return ResponseEntity.status(401).body(e.getMessage());
         }
 
+    }
+
+    @PostMapping("/signUp")
+    public ResponseEntity<?> addUser(@RequestBody SignUpDTO sdto) throws ParseException {
+
+        Users userAdded = new Users();
+
+        userAdded.setFirstname(sdto.getFirstName());
+        userAdded.setLastname(sdto.getLastName());
+        userAdded.setEmail(sdto.getEmail());
+        userAdded.setPassword(sdto.getPassword());
+        userAdded.setSpouseId(sdto.getSpouseId());
+        sdto = userservice.addUser(userAdded);
+        return ResponseEntity.ok(sdto);
     }
 
     @PostMapping("/users/{userid}/transaction")
