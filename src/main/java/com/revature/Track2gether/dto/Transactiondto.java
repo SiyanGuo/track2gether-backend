@@ -23,8 +23,9 @@ public class Transactiondto {
     private String firstname;
     private String lastname;
     private String email;
-   // private String spouseid;
-  //  private String spousefirstname;
-  //  private String spouselastname;
- //   private String spouseemail;
+    private boolean shared;
+    // private String spouseid;
+    //  private String spousefirstname;
+    //  private String spouselastname;
+    //   private String spouseemail;
 }

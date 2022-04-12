@@ -28,11 +28,13 @@ public class Transaction {
     @Column(name= "description")
     private String description;
 
+    @Column(name= "shared")
+    private boolean shared;
+
     @ManyToOne
     private Category category;
 
     @ManyToOne
-    //@JoinColumn(referencedColumnName = "id")
     private Users user;
 
 }
