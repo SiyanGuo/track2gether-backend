@@ -1,5 +1,6 @@
-package com.revature.Track2gether.model;
+package com.revature.Track2gether.dto;
 
+import com.revature.Track2gether.model.Users;
 import lombok.*;
 
 @NoArgsConstructor

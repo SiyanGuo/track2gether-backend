@@ -1,5 +1,8 @@
 package com.revature.Track2gether.service;
 
+import com.revature.Track2gether.dto.SignUpDTO;
+import com.revature.Track2gether.dto.Transactiondto;
+import com.revature.Track2gether.model.Transaction;
 import com.revature.Track2gether.model.Users;
 import com.revature.Track2gether.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +17,23 @@ public class UsersServiceImp implements UserService {
     @Autowired
     private UsersRepository userrepo;
 
+    private SignUpDTO convertUsersEntitytoDTO(Users user){
+        SignUpDTO sdto = new SignUpDTO();
+        sdto.setId(user.getId());
+        sdto.setFirstName(user.getFirstname());
+        sdto.setLastName(user.getLastname());
+        sdto.setEmail(user.getEmail());
+        sdto.setPassword(user.getPassword());
+        return sdto;
+
+    }
+
     @Override
-    @Transactional
-    public Users createUsers(Users user) {
+    public SignUpDTO addUser(Users user) {
         Users newUser = userrepo.save(user);
-        return newUser;
+        SignUpDTO sdto = new SignUpDTO();
+        sdto = convertUsersEntitytoDTO(newUser);
+        return sdto;
     }
 
     @Override

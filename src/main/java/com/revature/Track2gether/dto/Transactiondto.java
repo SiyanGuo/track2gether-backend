@@ -24,6 +24,7 @@ public class Transactiondto {
     private String lastname;
     private String email;
     private boolean shared;
+
    // private String spouseid;
   //  private String spousefirstname;
   //  private String spouselastname;
