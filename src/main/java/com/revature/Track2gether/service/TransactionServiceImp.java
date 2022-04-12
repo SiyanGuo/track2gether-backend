@@ -27,7 +27,7 @@ public class TransactionServiceImp implements TransactionService {
     @Autowired
     private CategoryRepository catrepo;
 
-    DateFormat df = new SimpleDateFormat("mm/dd/yyyy");
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
 
     private Transactiondto convertTransentitytoDTO(Transaction t){
@@ -93,7 +93,8 @@ public class TransactionServiceImp implements TransactionService {
 
     @Override
     public Transactiondto updateTransaction(Transaction t) {
-        Transaction targetTrans = transactionrepo.findById(t.getId()).get();
+
+       Transaction targetTrans = transactionrepo.findById(t.getId()).get();
         targetTrans.setAmount(t.getAmount());
         targetTrans.setDate(t.getDate());
         targetTrans.setDescription(t.getDescription());
@@ -126,4 +127,5 @@ public class TransactionServiceImp implements TransactionService {
         }
         return responses;
     }
+
 }
