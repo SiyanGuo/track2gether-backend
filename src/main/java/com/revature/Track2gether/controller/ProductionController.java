@@ -129,12 +129,12 @@ try{
     public ResponseEntity<?> getTransactionByUserId(@RequestHeader("Authorization")String headerValue, @PathVariable("userid") String userid,
                                                @RequestParam("transtype") Optional<Integer> transtype) throws BadParameterException {
         try{
-            Transaction transadd = new Transaction();
+        Transaction transadd = new Transaction();
         Users user = userservice.getUserById(Integer.parseInt(userid));
         String jwt = headerValue.split(" ")[1];
         try {
             UserJwtDto userdto = jwtService.parseJwt(jwt);
-            if(userdto.getUserId()==user.getId()) {
+            if(userdto.getUserId()==user.getId() || userdto.getSpouseId().getId()==user.getId()) {
                 List<Transactiondto> responses = new ArrayList<Transactiondto>();
                 if (transtype.isPresent()) {
                     logger.info("Get all transactions of a user by transactiontype...");
@@ -167,10 +167,10 @@ try{
         String jwt = headerValue.split(" ")[1];
         try {
             UserJwtDto userdto = jwtService.parseJwt(jwt);
-            if(userdto.getUserId()==user.getId()) {
+            if(userdto.getUserId()==user.getId() || userdto.getSpouseId().getId()==user.getId()) {
         List<Transactiondto> responses = new ArrayList<Transactiondto>();
         if(year!=0 && month!=0){
-            responses = transactionservice.findByTransactions( year , month);
+            responses = transactionservice.findByTransactions( year , month,user);
         }
 
         return ResponseEntity.ok(responses);}else{
@@ -240,7 +240,7 @@ try{
                 UserJwtDto userdto = jwtService.parseJwt(jwt);
                 if (userdto.getUserId() == user.getId()) {
                     transactionservice.deleteTransactionById(transid);
-                    return ResponseEntity.ok().build();
+                    return ResponseEntity.ok().body("successfully deleted..");
                 } else {
                     return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
                 }
