@@ -35,46 +35,29 @@ public class AuthenticationServiceTest {
             FailedLoginException, BadParameterException {
         // Arrange
         Users fakeUser = new Users();
+
         fakeUser.setId(99);
-        fakeUser.setFirstname("myFirstName");
-        fakeUser.setLastname("myLastName");
-        fakeUser.setPassword("myPassword");
-        fakeUser.setEmail("myemail@email.com");
+        fakeUser.setFirstname("firstName");
+        fakeUser.setLastname("lastName");
+        fakeUser.setPassword("password");
+        fakeUser.setEmail("email@email.com");
+        fakeUser.setSpouseId(fakeUser);
 
-        Users u = new Users();
-        u.setId(100);
-        u.setFirstname("yourFirstName");
-        u.setLastname("yourLastName");
-        u.setPassword("yourPassword");
-        u.setEmail("youremail@email.com");
-        u.setSpouseId(fakeUser);
-
-        fakeUser.setSpouseId(u);
-
-        when(userRepo.findByEmailAndPassword(eq("myemail@email.com"),
-                eq("myPassword"))).thenReturn(fakeUser);
+        when(userRepo.findByEmailAndPassword(eq("email@email.com"),
+                eq("password"))).thenReturn(fakeUser);
 
         // Act
-        Users actual = authService.login("myemail@email.com", "myPassword");
+        Users actual = authService.login("email@email.com", "password");
 
         // Assert
         Users expected = new Users();
+
         expected.setId(99);
-        expected.setFirstname("myFirstName");
-        expected.setLastname("myLastName");
-        expected.setPassword("myPassword");
-        expected.setEmail("myemail@email.com");
-        expected.setPassword("myPassword");
-
-        Users p = new Users();
-        p.setId(100);
-        p.setFirstname("yourFirstName");
-        p.setLastname("yourLastName");
-        p.setPassword("yourPassword");
-        p.setEmail("youremail@email.com");
-        p.setSpouseId(expected);
-
-        expected.setSpouseId(p);
+        expected.setFirstname("firstName");
+        expected.setLastname("lastName");
+        expected.setPassword("password");
+        expected.setEmail("email@email.com");
+        expected.setSpouseId(expected);
 
         Assertions.assertEquals(expected, actual);
 
@@ -86,21 +69,13 @@ public class AuthenticationServiceTest {
             FailedLoginException, BadParameterException {
         // Arrange
         Users fakeUser = new Users();
+
         fakeUser.setId(99);
         fakeUser.setFirstname("myFirstName");
         fakeUser.setLastname("myLastName");
         fakeUser.setPassword("myPassword");
         fakeUser.setEmail("myemail@email.com");
-
-        Users u = new Users();
-        u.setId(100);
-        u.setFirstname("yourFirstName");
-        u.setLastname("yourLastName");
-        u.setPassword("yourPassword");
-        u.setEmail("youremail@email.com");
-        u.setSpouseId(fakeUser);
-
-        fakeUser.setSpouseId(u);
+        fakeUser.setSpouseId(fakeUser);
 
         when(userRepo.findByEmailAndPassword(eq("myemail@email.com"),
                 eq("myPassword"))).thenReturn(fakeUser);
@@ -110,22 +85,13 @@ public class AuthenticationServiceTest {
 
         // Assert
         Users expected = new Users();
+
         expected.setId(99);
         expected.setFirstname("myFirstName");
         expected.setLastname("myLastName");
         expected.setPassword("myPassword");
         expected.setEmail("myemail@email.com");
-        expected.setPassword("myPassword");
-
-        Users p = new Users();
-        p.setId(100);
-        p.setFirstname("yourFirstName");
-        p.setLastname("yourLastName");
-        p.setPassword("yourPassword");
-        p.setEmail("youremail@email.com");
-        p.setSpouseId(expected);
-
-        expected.setSpouseId(p);
+        expected.setSpouseId(expected);
 
         Assertions.assertEquals(expected, actual);
 
