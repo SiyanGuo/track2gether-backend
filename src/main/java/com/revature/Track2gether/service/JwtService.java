@@ -2,8 +2,8 @@ package com.revature.Track2gether.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.Track2gether.dto.UserJwtDto;
 import com.revature.Track2gether.model.Users;
-import com.revature.Track2gether.model.UserJwtDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

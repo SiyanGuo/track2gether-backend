@@ -104,6 +104,7 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     @Override
+
     public Transactiondto updateTransaction(Transaction t) throws BadParameterException {
         if(t.getAmount()<=0)
         {
@@ -112,6 +113,9 @@ public class TransactionServiceImp implements TransactionService {
         {
             throw new BadParameterException("Enter a valid date");
         }
+
+    public Transactiondto updateTransaction(Transaction t) {
+
        Transaction targetTrans = transactionrepo.findById(t.getId()).get();
         targetTrans.setAmount(t.getAmount());
         targetTrans.setDate(t.getDate());
@@ -131,7 +135,7 @@ public class TransactionServiceImp implements TransactionService {
     @Override
     public void deleteTransactionById(int id) {
         Transaction targetTrans = transactionrepo.getById(id);
-          transactionrepo.delete(targetTrans);
+        transactionrepo.delete(targetTrans);
 
     }
     @Override
@@ -144,6 +148,7 @@ public class TransactionServiceImp implements TransactionService {
             cdto.setCategoryname(c.getCategoryname());
             responses.add(cdto);
         }
-        return responses;
+
     }
+
 }

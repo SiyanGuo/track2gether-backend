@@ -11,4 +11,4 @@ public class Categorydto {
     private int id;
     private String categoryname;
 
-}
+
