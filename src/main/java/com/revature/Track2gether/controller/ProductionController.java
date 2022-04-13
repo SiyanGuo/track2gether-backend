@@ -193,18 +193,20 @@ public class ProductionController {
                                                        @RequestParam("year") int year,
                                                        @RequestParam("month") int month) throws BadParameterException {
 
-try{
-        logger.info("Get all transactions of a user by month and year...");
-        Transaction transadd = new Transaction();
-        Users user = userservice.getUserById(Integer.parseInt(userid));
-        String jwt = headerValue.split(" ")[1];
-        try {
-            UserJwtDto userdto = jwtService.parseJwt(jwt);
-            if(userdto.getUserId()==user.getId() || userdto.getSpouseId().getId()==user.getId()) {
-        List<Transactiondto> responses = new ArrayList<Transactiondto>();
-        if(year!=0 && month!=0){
-            responses = transactionservice.findByTransactions( year , month,user);
-                       return ResponseEntity.ok(responses);}else{
+        try{
+            logger.info("Get all transactions of a user by month and year...");
+            Transaction transadd = new Transaction();
+            Users user = userservice.getUserById(Integer.parseInt(userid));
+            String jwt = headerValue.split(" ")[1];
+            try {
+                UserJwtDto userdto = jwtService.parseJwt(jwt);
+                if(userdto.getUserId()==user.getId() || userdto.getSpouseId().getId()==user.getId()) {
+                    List<Transactiondto> responses = new ArrayList<Transactiondto>();
+                    if(year!=0 && month!=0){
+                        responses = transactionservice.findByTransactions( year , month,user);
+                    }
+
+                    return ResponseEntity.ok(responses);}else{
                     return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
                 }
             }catch (JsonProcessingException e) {
@@ -212,9 +214,7 @@ try{
 
             }}catch (Exception e) {
             return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");}
-
     }
-
     /*___________________________________*/
     @PutMapping("/users/{userid}/transaction/{id}")
     public ResponseEntity<?> updateTransaction(@RequestHeader("Authorization")String headerValue,@PathVariable("userid") String userid,@PathVariable("id") String id,@RequestBody Transactiondto dto) throws ParseException, BadParameterException {
