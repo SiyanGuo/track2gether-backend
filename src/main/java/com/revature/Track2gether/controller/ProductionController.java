@@ -63,6 +63,7 @@ public class ProductionController {
     public ResponseEntity<?> login(@RequestBody LoginDTO dto) throws JsonProcessingException {
         try {
             // logger.info("Login functionality...");
+
             Users users = authService.login(dto.getEmail(), dto.getPassword());
 
             String jwt = jwtService.createJwt(users);
@@ -179,6 +180,7 @@ public class ProductionController {
                 return ResponseEntity.status(401).body(e.getMessage());
 
             }}catch (Exception e) {
+
             return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");}
 
     }
@@ -209,6 +211,7 @@ public class ProductionController {
 
             }}catch (Exception e) {
             return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");}
+
     }
 
     /*___________________________________*/
@@ -234,6 +237,7 @@ public class ProductionController {
                     Transactiondto newtrans = transactionservice.updateTransaction(transadd);
                     return ResponseEntity.ok(newtrans);
                 }else{
+
                     return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
                 }
 
@@ -242,6 +246,7 @@ public class ProductionController {
 
             }}catch (Exception e) {
             return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");}
+
 
 
 

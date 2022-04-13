@@ -13,10 +13,10 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
 
 
-   @Query("select t from Transaction t  where t.user=?1 and  t.category  in(select c from Category c  join  Transactiontype tt on c.transtype =tt.id and tt.id=?2)")
-   public List<Transaction> findByTransactiontype(Users user,int transtype);
-   public List<Transaction> findByUser(Users user);
-   @Query("select t from Transaction t where year(t.date)=?1 and month(t.date)=?2")
-   public List<Transaction> findByTransactions(int year,int month);
+    @Query("select t from Transaction t  where t.user=?1 and  t.category  in(select c from Category c  join  Transactiontype tt on c.transtype =tt.id and tt.id=?2)")
+    public List<Transaction> findByTransactiontype(Users user,int transtype);
+    public List<Transaction> findByUser(Users user);
+    @Query("select t from Transaction t where year(t.date)=?1 and month(t.date)=?2")
+    public List<Transaction> findByTransactions(int year,int month);
 
 }
