@@ -104,7 +104,6 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     @Override
-
     public Transactiondto updateTransaction(Transaction t) throws BadParameterException {
         if (t.getAmount() <= 0) {
             throw new BadParameterException("Enter a valid amount");
@@ -113,41 +112,40 @@ public class TransactionServiceImp implements TransactionService {
             throw new BadParameterException("Enter a valid date");
         }
 
-    public Transactiondto updateTransaction(Transaction t) {
+            Transaction targetTrans = transactionrepo.findById(t.getId()).get();
+            targetTrans.setAmount(t.getAmount());
+            targetTrans.setDate(t.getDate());
+            targetTrans.setDescription(t.getDescription());
+            targetTrans.setCategory(t.getCategory());
+            targetTrans.setShared(t.isShared());
+            //transactionrepo.save(targetTrans);
+            Transaction  updatedtrans = transactionrepo.save(targetTrans);
+            Transactiondto dt =new Transactiondto();
+            dt= convertTransentitytoDTO(updatedtrans);
+            return dt;
 
-       Transaction targetTrans = transactionrepo.findById(t.getId()).get();
-        targetTrans.setAmount(t.getAmount());
-        targetTrans.setDate(t.getDate());
-        targetTrans.setDescription(t.getDescription());
-        targetTrans.setCategory(t.getCategory());
-        targetTrans.setShared(t.isShared());
-        //transactionrepo.save(targetTrans);
-        Transaction  updatedtrans = transactionrepo.save(targetTrans);
-        Transactiondto dt =new Transactiondto();
-        dt= convertTransentitytoDTO(updatedtrans);
-        return dt;
-
-    }
-
-
-
-    @Override
-    public void deleteTransactionById(int id) {
-        Transaction targetTrans = transactionrepo.getById(id);
-        transactionrepo.delete(targetTrans);
-
-    }
-    @Override
-    public List<Categorydto> findByCategoryBytranstype(int transtype) {
-        List<Category> getCategory=catrepo.findByCategoryBytranstype(transtype);
-        List<Categorydto> responses = new ArrayList<Categorydto>();
-        for (Category c : getCategory) {
-            Categorydto cdto = new Categorydto();
-            cdto.setId(c.getId());
-            cdto.setCategoryname(c.getCategoryname());
-            responses.add(cdto);
         }
-        return responses;
-    }
+
+
+
+        @Override
+        public void deleteTransactionById(int id) {
+            Transaction targetTrans = transactionrepo.getById(id);
+            transactionrepo.delete(targetTrans);
+
+        }
+        @Override
+        public List<Categorydto> findByCategoryBytranstype(int transtype) {
+            List<Category> getCategory=catrepo.findByCategoryBytranstype(transtype);
+            List<Categorydto> responses = new ArrayList<Categorydto>();
+            for (Category c : getCategory) {
+                Categorydto cdto = new Categorydto();
+                cdto.setId(c.getId());
+                cdto.setCategoryname(c.getCategoryname());
+                responses.add(cdto);
+            }
+            return responses;
+        }
+
 
 }

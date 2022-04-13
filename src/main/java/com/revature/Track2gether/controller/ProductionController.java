@@ -62,7 +62,8 @@ public class ProductionController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO dto) throws JsonProcessingException {
         try {
-          // logger.info("Login functionality...");
+            // logger.info("Login functionality...");
+
             Users users = authService.login(dto.getEmail(), dto.getPassword());
 
             String jwt = jwtService.createJwt(users);
@@ -121,64 +122,65 @@ public class ProductionController {
 
     @PostMapping("/users/{userid}/transaction")
     public ResponseEntity<?> addTransaction(@RequestHeader("Authorization") String headerValue,@PathVariable("userid") String userid, @RequestBody Transactiondto dto) throws ParseException, JsonProcessingException, BadParameterException {
-try{
-           logger.info("Adding transaction...");
-           String jwt = headerValue.split(" ")[1];
-           Transaction transadd = new Transaction();
+        try{
+            logger.info("Adding transaction...");
+            String jwt = headerValue.split(" ")[1];
+            Transaction transadd = new Transaction();
 
-           Users user = userservice.getUserById(Integer.parseInt(userid));
-           Category category = catrepo.getById(dto.getCategoryid());
-           Date dt = df.parse(dto.getDate());
-           transadd.setAmount(dto.getAmount());
-           transadd.setDate(dt);
-           transadd.setDescription(dto.getDescription());
-           transadd.setUser(user);
-           transadd.setCategory(category);
-           transadd.setShared(dto.isShared());
-           try {
-               UserJwtDto userdto = jwtService.parseJwt(jwt);
-               if(userdto.getUserId()==user.getId())
-               {    dto = transactionservice.addTransaction(transadd);
-                     System.out.println(userdto);
-                     return ResponseEntity.ok(dto);}
-               else{
-                   return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
-               }
-           } catch (JsonProcessingException e) {
-                   return ResponseEntity.status(401).body(e.getMessage());
+            Users user = userservice.getUserById(Integer.parseInt(userid));
+            Category category = catrepo.getById(dto.getCategoryid());
+            Date dt = df.parse(dto.getDate());
+            transadd.setAmount(dto.getAmount());
+            transadd.setDate(dt);
+            transadd.setDescription(dto.getDescription());
+            transadd.setUser(user);
+            transadd.setCategory(category);
+            transadd.setShared(dto.isShared());
+            try {
+                UserJwtDto userdto = jwtService.parseJwt(jwt);
+                if(userdto.getUserId()==user.getId())
+                {    dto = transactionservice.addTransaction(transadd);
+                    System.out.println(userdto);
+                    return ResponseEntity.ok(dto);}
+                else{
+                    return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
+                }
+            } catch (JsonProcessingException e) {
+                return ResponseEntity.status(401).body(e.getMessage());
 
-           }}catch (Exception e) {
-                 return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");
+            }}catch (Exception e) {
+            return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");
 
-}}
+        }}
 
     /*___________________________________*/
     @GetMapping("/users/{userid}/transactions")
     public ResponseEntity<?> getTransactionByUserId(@RequestHeader("Authorization")String headerValue, @PathVariable("userid") String userid,
-                                               @RequestParam("transtype") Optional<Integer> transtype) throws BadParameterException {
+                                                    @RequestParam("transtype") Optional<Integer> transtype) throws BadParameterException {
         try{
             Transaction transadd = new Transaction();
-        Users user = userservice.getUserById(Integer.parseInt(userid));
-        String jwt = headerValue.split(" ")[1];
-        try {
-            UserJwtDto userdto = jwtService.parseJwt(jwt);
-            if(userdto.getUserId()==user.getId()) {
-                List<Transactiondto> responses = new ArrayList<Transactiondto>();
-                if (transtype.isPresent()) {
-                    logger.info("Get all transactions of a user by transactiontype...");
-                    responses = transactionservice.findByTransactiontype(user, transtype.get());
-                } else {
-                    logger.info("Get all transactions of a user...");
-                    responses = transactionservice.findByUser(user);
+            Users user = userservice.getUserById(Integer.parseInt(userid));
+            String jwt = headerValue.split(" ")[1];
+            try {
+                UserJwtDto userdto = jwtService.parseJwt(jwt);
+                if(userdto.getUserId()==user.getId()) {
+                    List<Transactiondto> responses = new ArrayList<Transactiondto>();
+                    if (transtype.isPresent()) {
+                        logger.info("Get all transactions of a user by transactiontype...");
+                        responses = transactionservice.findByTransactiontype(user, transtype.get());
+                    } else {
+                        logger.info("Get all transactions of a user...");
+                        responses = transactionservice.findByUser(user);
+                    }
+                    return ResponseEntity.ok(responses);
+                } else{
+                    return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
                 }
-                return ResponseEntity.ok(responses);
-            } else{
-                return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
-            }
-        }catch (JsonProcessingException e) {
-            return ResponseEntity.status(401).body(e.getMessage());
+            }catch (JsonProcessingException e) {
+                return ResponseEntity.status(401).body(e.getMessage());
 
-        }}catch (Exception e) {
+            }}catch (Exception e) {
+
             return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");}
 
     }
@@ -188,52 +190,54 @@ try{
                                                        @RequestParam("year") int year,
                                                        @RequestParam("month") int month) throws BadParameterException {
 
-try{
-        logger.info("Get all transactions of a user by month and year...");
-        Transaction transadd = new Transaction();
-        Users user = userservice.getUserById(Integer.parseInt(userid));
-        String jwt = headerValue.split(" ")[1];
-        try {
-            UserJwtDto userdto = jwtService.parseJwt(jwt);
-            if(userdto.getUserId()==user.getId()) {
-        List<Transactiondto> responses = new ArrayList<Transactiondto>();
-        if(year!=0 && month!=0){
-            responses = transactionservice.findByTransactions( year , month);
-        }
+        try{
+            logger.info("Get all transactions of a user by month and year...");
+            Transaction transadd = new Transaction();
+            Users user = userservice.getUserById(Integer.parseInt(userid));
+            String jwt = headerValue.split(" ")[1];
+            try {
+                UserJwtDto userdto = jwtService.parseJwt(jwt);
+                if(userdto.getUserId()==user.getId()) {
+                    List<Transactiondto> responses = new ArrayList<Transactiondto>();
+                    if(year!=0 && month!=0){
+                        responses = transactionservice.findByTransactions( year , month);
+                    }
 
-        return ResponseEntity.ok(responses);}else{
-                return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
-            }
-        }catch (JsonProcessingException e) {
-            return ResponseEntity.status(401).body(e.getMessage());
+                    return ResponseEntity.ok(responses);}else{
+                    return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
+                }
+            }catch (JsonProcessingException e) {
+                return ResponseEntity.status(401).body(e.getMessage());
 
-        }}catch (Exception e) {
-        return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");}
+            }}catch (Exception e) {
+            return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");}
+
     }
 
     /*___________________________________*/
     @PutMapping("/users/{userid}/transaction/{id}")
     public ResponseEntity<?> updateTransaction(@RequestHeader("Authorization")String headerValue,@PathVariable("userid") String userid,@PathVariable("id") String id,@RequestBody Transactiondto dto) throws ParseException, BadParameterException {
-try{
-        logger.info("Update transaction of a user...");
-        Transaction transadd = new Transaction();
-        Users user = userservice.getUserById(Integer.parseInt(userid));
-        Category category = catrepo.getById(dto.getCategoryid());
-        transadd.setId(Integer.parseInt(id));
-        Date dt = df.parse(dto.getDate());
-        transadd.setAmount(dto.getAmount());
-        transadd.setDate(dt);
-        transadd.setDescription(dto.getDescription());
-        transadd.setUser(user);
-        transadd.setCategory(category);
-        transadd.setShared(dto.isShared());
-        String jwt = headerValue.split(" ")[1];
-        try {
-            UserJwtDto userdto = jwtService.parseJwt(jwt);
-            if(userdto.getUserId()==user.getId()) {
-                Transactiondto newtrans = transactionservice.updateTransaction(transadd);
-                return ResponseEntity.ok(newtrans);
-            }else{
+        try{
+            logger.info("Update transaction of a user...");
+            Transaction transadd = new Transaction();
+            Users user = userservice.getUserById(Integer.parseInt(userid));
+            Category category = catrepo.getById(dto.getCategoryid());
+            transadd.setId(Integer.parseInt(id));
+            Date dt = df.parse(dto.getDate());
+            transadd.setAmount(dto.getAmount());
+            transadd.setDate(dt);
+            transadd.setDescription(dto.getDescription());
+            transadd.setUser(user);
+            transadd.setCategory(category);
+            transadd.setShared(dto.isShared());
+            String jwt = headerValue.split(" ")[1];
+            try {
+                UserJwtDto userdto = jwtService.parseJwt(jwt);
+                if(userdto.getUserId()==user.getId()) {
+                    Transactiondto newtrans = transactionservice.updateTransaction(transadd);
+                    return ResponseEntity.ok(newtrans);
+                }else{
+
                     return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
                 }
 
@@ -241,7 +245,8 @@ try{
                 return ResponseEntity.status(401).body(e.getMessage());
 
             }}catch (Exception e) {
-        return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");}
+            return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");}
+
 
 
 
