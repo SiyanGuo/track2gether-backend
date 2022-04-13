@@ -3,6 +3,7 @@ package com.revature.Track2gether.service;
 
 import com.revature.Track2gether.dto.Categorydto;
 import com.revature.Track2gether.dto.Transactiondto;
+import com.revature.Track2gether.exception.BadParameterException;
 import com.revature.Track2gether.model.Category;
 import com.revature.Track2gether.model.Transaction;
 import com.revature.Track2gether.model.Users;
@@ -27,7 +28,7 @@ public class TransactionServiceImp implements TransactionService {
     @Autowired
     private CategoryRepository catrepo;
 
-    DateFormat df = new SimpleDateFormat("mm/dd/yyyy");
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
 
     private Transactiondto convertTransentitytoDTO(Transaction t){
@@ -54,7 +55,14 @@ public class TransactionServiceImp implements TransactionService {
 
 
     @Override
-    public Transactiondto addTransaction(Transaction t) {
+    public Transactiondto addTransaction(Transaction t) throws BadParameterException {
+        if(t.getAmount()<=0)
+        {
+            throw new BadParameterException("Enter a valid amount");
+        }if(t.getDate()==null)
+        {
+            throw new BadParameterException("Enter a valid date");
+        }
         Transaction  newtransaction = transactionrepo.save(t);
         Transactiondto dt =new Transactiondto();
         dt= convertTransentitytoDTO(newtransaction);
@@ -72,7 +80,11 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     @Override
-    public List<Transactiondto> findByTransactiontype(Users user ,int transtype) {
+    public List<Transactiondto> findByTransactiontype(Users user ,int transtype) throws BadParameterException {
+        if(transtype!=1 && transtype!=2)
+        {
+            throw new BadParameterException("Enter a valid Transaction type");
+        }
         List<Transaction> t= transactionrepo.findByTransactiontype( user ,transtype);
         List<Transactiondto> responses = new ArrayList<Transactiondto>();
         for (Transaction trans : t) {
@@ -92,38 +104,49 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     @Override
-    public Transactiondto updateTransaction(Transaction t) {
-        Transaction targetTrans = transactionrepo.findById(t.getId()).get();
-        targetTrans.setAmount(t.getAmount());
-        targetTrans.setDate(t.getDate());
-        targetTrans.setDescription(t.getDescription());
-        targetTrans.setCategory(t.getCategory());
-        targetTrans.setShared(t.isShared());
-        Transaction  updatedtrans = targetTrans;
-        Transactiondto dt =new Transactiondto();
-        dt= convertTransentitytoDTO(updatedtrans);
-        return dt;
 
-    }
-
-
-
-    @Override
-    public void deleteTransactionById(int id) {
-        Transaction targetTrans = transactionrepo.getById(id);
-        transactionrepo.delete(targetTrans);
-
-    }
-    @Override
-    public List<Categorydto> findByCategoryBytranstype(int transtype) {
-        List<Category> getCategory=catrepo.findByCategoryBytranstype(transtype);
-        List<Categorydto> responses = new ArrayList<Categorydto>();
-        for (Category c : getCategory) {
-            Categorydto cdto = new Categorydto();
-            cdto.setId(c.getId());
-            cdto.setCategoryname(c.getCategoryname());
-            responses.add(cdto);
+    public Transactiondto updateTransaction(Transaction t) throws BadParameterException {
+        if(t.getAmount()<=0)
+        {
+            throw new BadParameterException("Enter a valid amount");
+        }if(t.getDate()==null)
+        {
+            throw new BadParameterException("Enter a valid date");
         }
-        return responses;
-    }
+
+            Transaction targetTrans = transactionrepo.findById(t.getId()).get();
+            targetTrans.setAmount(t.getAmount());
+            targetTrans.setDate(t.getDate());
+            targetTrans.setDescription(t.getDescription());
+            targetTrans.setCategory(t.getCategory());
+            targetTrans.setShared(t.isShared());
+            //transactionrepo.save(targetTrans);
+            Transaction  updatedtrans = transactionrepo.save(targetTrans);
+            Transactiondto dt =new Transactiondto();
+            dt= convertTransentitytoDTO(updatedtrans);
+            return dt;
+
+        }
+
+
+
+        @Override
+        public void deleteTransactionById(int id) {
+            Transaction targetTrans = transactionrepo.getById(id);
+            transactionrepo.delete(targetTrans);
+
+        }
+        @Override
+        public List<Categorydto> findByCategoryBytranstype(int transtype) {
+            List<Category> getCategory=catrepo.findByCategoryBytranstype(transtype);
+            List<Categorydto> responses = new ArrayList<Categorydto>();
+            for (Category c : getCategory) {
+                Categorydto cdto = new Categorydto();
+                cdto.setId(c.getId());
+                cdto.setCategoryname(c.getCategoryname());
+                responses.add(cdto);
+            }
+            return responses;
+        }
+
 }
