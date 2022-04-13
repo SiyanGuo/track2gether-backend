@@ -31,7 +31,7 @@ public class TransactionServiceImp implements TransactionService {
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
 
-    private Transactiondto convertTransentitytoDTO(Transaction t){
+    public Transactiondto convertTransentitytoDTO(Transaction t){
         Transactiondto dto = new Transactiondto();
         dto.setId(t.getId());
         dto.setAmount(t.getAmount());
@@ -94,8 +94,8 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     @Override
-    public List<Transactiondto> findByTransactions(int year, int month) {
-        List<Transaction> t =  transactionrepo.findByTransactions(year, month);
+    public List<Transactiondto> findByTransactions(int year, int month,Users user) {
+        List<Transaction> t =  transactionrepo.findByTransactions(year, month,user);
         List<Transactiondto> responses = new ArrayList<Transactiondto>();
         for (Transaction trans : t) {
             responses.add(convertTransentitytoDTO(trans));
@@ -135,6 +135,7 @@ public class TransactionServiceImp implements TransactionService {
             transactionrepo.delete(targetTrans);
 
         }
+
         @Override
         public List<Categorydto> findByCategoryBytranstype(int transtype) {
             List<Category> getCategory=catrepo.findByCategoryBytranstype(transtype);
@@ -147,6 +148,7 @@ public class TransactionServiceImp implements TransactionService {
             }
             return responses;
         }
+
 
 
 }

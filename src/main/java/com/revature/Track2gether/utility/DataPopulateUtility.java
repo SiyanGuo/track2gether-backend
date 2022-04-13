@@ -39,7 +39,9 @@ public class DataPopulateUtility {
         expense.setType("expenses");
         em.persist(expense);
 
-        //Category
+
+    //Category
+
 
         Category salary =new Category();
         salary.setCategoryname("salary");
@@ -258,3 +260,4 @@ public class DataPopulateUtility {
 
     }
 }
+
