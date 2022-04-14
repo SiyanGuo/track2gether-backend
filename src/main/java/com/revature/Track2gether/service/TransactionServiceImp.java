@@ -31,7 +31,7 @@ public class TransactionServiceImp implements TransactionService {
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
 
-    private Transactiondto convertTransentitytoDTO(Transaction t){
+    public Transactiondto convertTransentitytoDTO(Transaction t){
         Transactiondto dto = new Transactiondto();
         dto.setId(t.getId());
         dto.setAmount(t.getAmount());
@@ -94,8 +94,8 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     @Override
-    public List<Transactiondto> findByTransactions(int year, int month) {
-        List<Transaction> t =  transactionrepo.findByTransactions(year, month);
+    public List<Transactiondto> findByTransactions(int year, int month, Users user) {
+        List<Transaction> t =  transactionrepo.findByTransactions(year, month, user);
         List<Transactiondto> responses = new ArrayList<Transactiondto>();
         for (Transaction trans : t) {
             responses.add(convertTransentitytoDTO(trans));
@@ -104,7 +104,6 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     @Override
-
     public Transactiondto updateTransaction(Transaction t) throws BadParameterException {
         if(t.getAmount()<=0)
         {
@@ -114,39 +113,42 @@ public class TransactionServiceImp implements TransactionService {
             throw new BadParameterException("Enter a valid date");
         }
 
-            Transaction targetTrans = transactionrepo.findById(t.getId()).get();
-            targetTrans.setAmount(t.getAmount());
-            targetTrans.setDate(t.getDate());
-            targetTrans.setDescription(t.getDescription());
-            targetTrans.setCategory(t.getCategory());
-            targetTrans.setShared(t.isShared());
-            //transactionrepo.save(targetTrans);
-            Transaction  updatedtrans = transactionrepo.save(targetTrans);
-            Transactiondto dt =new Transactiondto();
-            dt= convertTransentitytoDTO(updatedtrans);
-            return dt;
+        Transaction targetTrans = transactionrepo.findById(t.getId()).get();
+        targetTrans.setAmount(t.getAmount());
+        targetTrans.setDate(t.getDate());
+        targetTrans.setDescription(t.getDescription());
+        targetTrans.setCategory(t.getCategory());
+        targetTrans.setShared(t.isShared());
+        //transactionrepo.save(targetTrans);
+        Transaction  updatedtrans = transactionrepo.save(targetTrans);
+        Transactiondto dt =new Transactiondto();
+        dt= convertTransentitytoDTO(updatedtrans);
+        return dt;
 
+    }
+
+
+
+    @Override
+    public void deleteTransactionById(int id) {
+        Transaction targetTrans = transactionrepo.getById(id);
+        transactionrepo.delete(targetTrans);
+
+    }
+
+    @Override
+    public List<Categorydto> findByCategoryBytranstype(int transtype) {
+        List<Category> getCategory=catrepo.findByCategoryBytranstype(transtype);
+        List<Categorydto> responses = new ArrayList<Categorydto>();
+        for (Category c : getCategory) {
+            Categorydto cdto = new Categorydto();
+            cdto.setId(c.getId());
+            cdto.setCategoryname(c.getCategoryname());
+            responses.add(cdto);
         }
+        return responses;
+    }
 
 
-
-        @Override
-        public void deleteTransactionById(int id) {
-            Transaction targetTrans = transactionrepo.getById(id);
-            transactionrepo.delete(targetTrans);
-
-        }
-        @Override
-        public List<Categorydto> findByCategoryBytranstype(int transtype) {
-            List<Category> getCategory=catrepo.findByCategoryBytranstype(transtype);
-            List<Categorydto> responses = new ArrayList<Categorydto>();
-            for (Category c : getCategory) {
-                Categorydto cdto = new Categorydto();
-                cdto.setId(c.getId());
-                cdto.setCategoryname(c.getCategoryname());
-                responses.add(cdto);
-            }
-            return responses;
-        }
 
 }

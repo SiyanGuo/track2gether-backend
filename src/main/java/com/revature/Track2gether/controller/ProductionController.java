@@ -14,6 +14,7 @@ import com.revature.Track2gether.service.AuthenticationService;
 import com.revature.Track2gether.service.JwtService;
 import com.revature.Track2gether.service.TransactionService;
 import com.revature.Track2gether.service.UserService;
+import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,19 +59,75 @@ public class ProductionController {
     SignUpDTO sdto = new SignUpDTO();
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
+    @PostMapping("/signUp")
+    public ResponseEntity<?> signUp(@RequestBody Users user) throws BadParameterException {
+
+        /*
+        Users newUser2 = new Users();
+
+        newUser1.setFirstname(sdto.getFirstName());
+        newUser1.setLastname(sdto.getLastName());
+        newUser1.setEmail(sdto.getEmail());
+        newUser1.setPassword(sdto.getPassword());
+
+         */
+        Users newUser = new Users();
+        newUser.setFirstname(user.getFirstname());
+        newUser.setLastname(user.getLastname());
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(user.getPassword());
+
+        /*
+        Users spouse = new Users();
+        spouse.setFirstname(user.getFirstname());
+        spouse.setLastname(user.getLastname());
+        spouse.setEmail(user.getEmail());
+        spouse.setPassword(user.getPassword());
+        newUser.setSpouseId(new Users(spouse_id , spouse.getFirstname(),
+                spouse.getLastname(), spouse.getEmail(), spouse.getPassword(), newUser));
+         */
+        /*
+
+        newUser.setSpouseId(spouse.getSpouseId());
+        spouse.setSpouseId(newUser.getSpouseId());
+
+         */
+        System.out.println(newUser.getFirstname());
+        System.out.println(newUser.getLastname());
+        System.out.println(newUser.getEmail());
+        System.out.println(newUser.getPassword());
+        System.out.println(newUser.getSpouseId());
+
+        Users added = userservice.addUser(user);
+
+        int newUserId = added.getId();
+        int spouse_id = newUserId + 1;
+
+        newUser.setSpouseId(new Users(spouse_id, added.getFirstname(), added.getLastname(),
+                added. getEmail(), added.getPassword(), added));
+
+        System.out.println(added.getId());
+        System.out.println(added.getSpouseId());
+        System.out.println(newUser.getSpouseId());
+
+
+        return ResponseEntity.ok(added);
+
+
+    }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO dto) throws JsonProcessingException {
         try {
             // logger.info("Login functionality...");
+
             Users users = authService.login(dto.getEmail(), dto.getPassword());
 
             String jwt = jwtService.createJwt(users);
 
             HttpHeaders responseHeaders = new HttpHeaders   ();
             responseHeaders.set("token", jwt);
-
-            UserResponseDTO udto = new UserResponseDTO();
 
             udto.setId(users.getId());
             udto.setFirstName(users.getFirstname());
@@ -103,20 +160,6 @@ public class ProductionController {
             return ResponseEntity.status(401).body(e.getMessage());
         }
 
-    }
-
-    @PostMapping("/signUp")
-    public ResponseEntity<?> addUser(@RequestBody SignUpDTO sdto) throws ParseException {
-
-        Users userAdded = new Users();
-
-        userAdded.setFirstname(sdto.getFirstName());
-        userAdded.setLastname(sdto.getLastName());
-        userAdded.setEmail(sdto.getEmail());
-        userAdded.setPassword(sdto.getPassword());
-        userAdded.setSpouseId(sdto.getSpouseId());
-        sdto = userservice.addUser(userAdded);
-        return ResponseEntity.ok(sdto);
     }
 
     @PostMapping("/users/{userid}/transaction")
@@ -157,12 +200,13 @@ public class ProductionController {
     public ResponseEntity<?> getTransactionByUserId(@RequestHeader("Authorization")String headerValue, @PathVariable("userid") String userid,
                                                     @RequestParam("transtype") Optional<Integer> transtype) throws BadParameterException {
         try{
+
             Transaction transadd = new Transaction();
             Users user = userservice.getUserById(Integer.parseInt(userid));
             String jwt = headerValue.split(" ")[1];
             try {
                 UserJwtDto userdto = jwtService.parseJwt(jwt);
-                if(userdto.getUserId()==user.getId()) {
+                if(userdto.getUserId()==user.getId() || userdto.getSpouseId().getId()==user.getId()) {
                     List<Transactiondto> responses = new ArrayList<Transactiondto>();
                     if (transtype.isPresent()) {
                         logger.info("Get all transactions of a user by transactiontype...");
@@ -170,15 +214,18 @@ public class ProductionController {
                     } else {
                         logger.info("Get all transactions of a user...");
                         responses = transactionservice.findByUser(user);
+
                     }
                     return ResponseEntity.ok(responses);
                 } else{
                     return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
+
                 }
             }catch (JsonProcessingException e) {
                 return ResponseEntity.status(401).body(e.getMessage());
 
             }}catch (Exception e) {
+
             return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");}
 
     }
@@ -188,17 +235,17 @@ public class ProductionController {
                                                        @RequestParam("year") int year,
                                                        @RequestParam("month") int month) throws BadParameterException {
 
-        try{
+        try {
             logger.info("Get all transactions of a user by month and year...");
             Transaction transadd = new Transaction();
             Users user = userservice.getUserById(Integer.parseInt(userid));
             String jwt = headerValue.split(" ")[1];
             try {
                 UserJwtDto userdto = jwtService.parseJwt(jwt);
-                if(userdto.getUserId()==user.getId()) {
+                if (userdto.getUserId() == user.getId() || userdto.getSpouseId().getId() == user.getId()) {
                     List<Transactiondto> responses = new ArrayList<Transactiondto>();
-                    if(year!=0 && month!=0){
-                        responses = transactionservice.findByTransactions( year , month);
+                    if (year != 0 && month != 0) {
+                        responses = transactionservice.findByTransactions(year, month, user);
                     }
 
                     return ResponseEntity.ok(responses);}else{
@@ -209,77 +256,82 @@ public class ProductionController {
 
             }}catch (Exception e) {
             return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");}
-    }
-
-    /*___________________________________*/
-    @PutMapping("/users/{userid}/transaction/{id}")
-    public ResponseEntity<?> updateTransaction(@RequestHeader("Authorization")String headerValue,@PathVariable("userid") String userid,@PathVariable("id") String id,@RequestBody Transactiondto dto) throws ParseException, BadParameterException {
-        try{
-            logger.info("Update transaction of a user...");
-            Transaction transadd = new Transaction();
-            Users user = userservice.getUserById(Integer.parseInt(userid));
-            Category category = catrepo.getById(dto.getCategoryid());
-            transadd.setId(Integer.parseInt(id));
-            Date dt = df.parse(dto.getDate());
-            transadd.setAmount(dto.getAmount());
-            transadd.setDate(dt);
-            transadd.setDescription(dto.getDescription());
-            transadd.setUser(user);
-            transadd.setCategory(category);
-            transadd.setShared(dto.isShared());
-            String jwt = headerValue.split(" ")[1];
-            try {
-                UserJwtDto userdto = jwtService.parseJwt(jwt);
-                if(userdto.getUserId()==user.getId()) {
-                    Transactiondto newtrans = transactionservice.updateTransaction(transadd);
-                    return ResponseEntity.ok(newtrans);
-                }else{
-                    return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
-                }
-
-            }catch (JsonProcessingException e) {
-                return ResponseEntity.status(401).body(e.getMessage());
-
-            }}catch (Exception e) {
-            return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");}
-
-
 
     }
-    /*___________________________________*/
-    @GetMapping("/category")
-    public ResponseEntity<?> getAllCategory(@RequestParam("type") int transid)
-
-    {
-        logger.info("Get all Category...");
-        List<Categorydto> cdto = transactionservice.findByCategoryBytranstype(transid);
-        return ResponseEntity.ok(cdto);
-    }
 
 
-    @DeleteMapping("/users/{userid}/transaction/{id}")
-    public ResponseEntity<?> deleteTransaction(@RequestHeader("Authorization")String headerValue,@PathVariable("userid") String userid,@PathVariable("id") String id) throws EntityNotFoundException, BadParameterException {
-        try {
-            logger.info("Deleting transaction of a user...");
-            int transid = Integer.parseInt(id);
-            Users user = userservice.getUserById(Integer.parseInt(userid));
-            String jwt = headerValue.split(" ")[1];
-            try {
-                UserJwtDto userdto = jwtService.parseJwt(jwt);
-                if (userdto.getUserId() == user.getId()) {
-                    transactionservice.deleteTransactionById(transid);
-                    return ResponseEntity.ok().build();
-                } else {
-                    return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
-                }
+        /*___________________________________*/
+        @PutMapping("/users/{userid}/transaction/{id}")
+        public ResponseEntity<?> updateTransaction(@RequestHeader("Authorization")String headerValue,@PathVariable("userid") String userid,@PathVariable("id") String id,@RequestBody Transactiondto dto) throws ParseException, BadParameterException {
 
-            } catch (JsonProcessingException e) {
-                return ResponseEntity.status(401).body(e.getMessage());
+            try{
+                logger.info("Update transaction of a user...");
+                Transaction transadd = new Transaction();
+                Users user = userservice.getUserById(Integer.parseInt(userid));
+                Category category = catrepo.getById(dto.getCategoryid());
+                transadd.setId(Integer.parseInt(id));
+                Date dt = df.parse(dto.getDate());
+                transadd.setAmount(dto.getAmount());
+                transadd.setDate(dt);
+                transadd.setDescription(dto.getDescription());
+                transadd.setUser(user);
+                transadd.setCategory(category);
+                transadd.setShared(dto.isShared());
+                String jwt = headerValue.split(" ")[1];
+                try {
+                    UserJwtDto userdto = jwtService.parseJwt(jwt);
+                    if(userdto.getUserId()==user.getId()) {
+                        Transactiondto newtrans = transactionservice.updateTransaction(transadd);
+                        return ResponseEntity.ok(newtrans);
+                    }else{
 
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(401).body(e.getMessage() + "Please validate input");
+                        return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
+                    }
+
+                }catch (JsonProcessingException e) {
+                    return ResponseEntity.status(401).body(e.getMessage());
+
+                }}catch (Exception e) {
+                return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");}
+
+
+
+
         }
-    }
+        /*___________________________________*/
+        @GetMapping("/category")
+        public ResponseEntity<?> getAllCategory(@RequestParam("type") int transid)
 
-}
+        {
+            logger.info("Get all Category...");
+            List<Categorydto> cdto = transactionservice.findByCategoryBytranstype(transid);
+            return ResponseEntity.ok(cdto);
+        }
+
+
+        @DeleteMapping("/users/{userid}/transaction/{id}")
+        public ResponseEntity<?> deleteTransaction(@RequestHeader("Authorization")String headerValue,@PathVariable("userid") String userid,@PathVariable("id") String id) throws EntityNotFoundException, BadParameterException {
+            try {
+                logger.info("Deleting transaction of a user...");
+                int transid = Integer.parseInt(id);
+                Users user = userservice.getUserById(Integer.parseInt(userid));
+                String jwt = headerValue.split(" ")[1];
+                try {
+                    UserJwtDto userdto = jwtService.parseJwt(jwt);
+                    if (userdto.getUserId() == user.getId()) {
+                        transactionservice.deleteTransactionById(transid);
+                        return ResponseEntity.ok().body("successfully deleted..");
+                    } else {
+                        return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
+                    }
+
+                } catch (JsonProcessingException e) {
+                    return ResponseEntity.status(401).body(e.getMessage());
+
+                }
+            } catch (Exception e) {
+                return ResponseEntity.status(401).body(e.getMessage() + "Please validate input");
+            }
+        }
+
+    }
