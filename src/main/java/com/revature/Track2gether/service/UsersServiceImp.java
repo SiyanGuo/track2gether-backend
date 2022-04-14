@@ -1,10 +1,13 @@
 package com.revature.Track2gether.service;
 
 
+import com.revature.Track2gether.dto.UserResponseDTO;
 import com.revature.Track2gether.exception.BadParameterException;
 import com.revature.Track2gether.dto.SignUpDTO;
 import com.revature.Track2gether.dto.Transactiondto;
 import com.revature.Track2gether.model.Transaction;
+import org.mindrot.jbcrypt.BCrypt;
+
 
 import com.revature.Track2gether.model.Users;
 import com.revature.Track2gether.repositories.UsersRepository;
@@ -14,30 +17,33 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 @Service
 public class UsersServiceImp implements UserService {
 
     @Autowired
     private UsersRepository userrepo;
 
-    private SignUpDTO convertUsersEntitytoDTO(Users user){
-        SignUpDTO sdto = new SignUpDTO();
-        sdto.setId(user.getId());
-        sdto.setFirstName(user.getFirstname());
-        sdto.setLastName(user.getLastname());
-        sdto.setEmail(user.getEmail());
-        sdto.setPassword(user.getPassword());
-        return sdto;
-
-    }
 
     @Override
-    public SignUpDTO addUser(Users user) {
-        Users newUser = userrepo.save(user);
-        SignUpDTO sdto = new SignUpDTO();
-        sdto = convertUsersEntitytoDTO(newUser);
-        return sdto;
+    public Users addUser(Users user) throws BadParameterException {
+
+        if (user.getFirstname().equals("") || user.getLastname().trim().equals("")
+                || user.getEmail().trim().equals("") || user.getPassword().trim().equals("")) {
+            throw new BadParameterException("Do not leave any information blank");
+        }
+
+        Users newUser = this.userrepo.save(user);
+/*
+        String algorithm = "SHA-256";
+        String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+        user.setPassword(hashedPassword);
+
+ */
+        return newUser;
     }
 
     @Override
@@ -49,21 +55,6 @@ public class UsersServiceImp implements UserService {
         }catch (Exception e){
             throw new EntityNotFoundException("User not found....");
         }
-
-    }
-
-    @Override
-    public List<Users> getAll() {
-        return null;
-    }
-
-    @Override
-    public Users UpdateUsers(Users c) {
-        return null;
-    }
-
-    @Override
-    public void deleteUsersById(int id) {
 
     }
 }
