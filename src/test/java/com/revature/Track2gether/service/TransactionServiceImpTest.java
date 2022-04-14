@@ -28,7 +28,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+
+import java.util.Optional;
+
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -115,8 +119,9 @@ class TransactionServiceImpTest {
 
         Transactiondto actualdto = transserviceImp.addTransaction(faketransaction);
         Transactiondto expected = fakedto;
-        Assertions.assertEquals(expected,actualdto);
-    }
+         Assertions.assertEquals(expected,actualdto);
+}
+
     @Test
     public void findByUserTest() {
 
@@ -153,19 +158,19 @@ class TransactionServiceImpTest {
 
     @Test
     void updateTransaction() throws BadParameterException {
-      /* when(transrepo.findById(111).get()).thenReturn(faketransaction);
+        int i=1;
+        when(transrepo.findById(i)).thenReturn(Optional.ofNullable(faketransaction));
         Mockito.lenient().when(transrepo.save(faketransaction)).thenReturn(faketransaction);
         Transactiondto actualdto = transserviceImp.updateTransaction(faketransaction);
         Transactiondto expected = fakedto;
-        Assertions.assertEquals(expected, actualdto);*/
+        Assertions.assertEquals(expected, actualdto);
     }
 
     @Test
     void deleteTransactionById() {
-      /*  when(transrepo.findById(111).get()).thenReturn(faketransaction);
-        when(transrepo.delete()).getMock(tr))
-        Assertions.assertEquals(transrepo.delete(faketransaction),transserviceImp.deleteTransactionById(1));*/
-
+       // int i=1;
+        //when(transrepo.getById(i)).thenReturn(faketransaction);
+        //Mockito.lenient().when(transrepo.delete(faketransaction)).thenReturn()
     }
 
     @Test
