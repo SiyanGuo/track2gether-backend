@@ -21,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import javax.security.auth.login.FailedLoginException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -30,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -62,6 +60,7 @@ class TransactionServiceImpTest {
         fakeuser.setPassword("lixy123");
 
         // Category fakecat = new Category();
+
         fakecat.setId(6);
         fakecat.setCategoryname("food");
         fakecat.setTranstype(new Transactiontype(6, "expenses"));
@@ -69,6 +68,7 @@ class TransactionServiceImpTest {
 
 
         //  Transaction faketransaction = new Transaction();
+
         faketransaction.setId(1);
         faketransaction.setDate(df.parse("12/12/2022"));
         faketransaction.setAmount(2000);
@@ -78,6 +78,7 @@ class TransactionServiceImpTest {
         faketransaction.setCategory(fakecat);
 
         // Transactiondto fakedto = new Transactiondto();
+
         fakedto.setId(1);
         fakedto.setEmail("abc.j8@gmail.com");
         fakedto.setLastname("mat");
@@ -104,6 +105,7 @@ class TransactionServiceImpTest {
         fakeTransDto.add(new Transactiondto(2, 300, "12/01/2022", 6,
                 "grocery shopping", "food", "expenses", 1, "lixy",
                 "mat", "abc.j8@gmail.com", false));
+
 
     }
 
@@ -141,14 +143,12 @@ class TransactionServiceImpTest {
 
     @Test
     void findByTransactions() {
-
         when(transrepo.findByTransactions(eq(2022), eq(12), eq(fakeuser))).thenReturn(fakeTransactions);
 
         List<Transactiondto> actual = transserviceImp.findByTransactions(2022, 12, fakeuser);
         List<Transactiondto> expected = new ArrayList<>(fakeTransDto);
 
         Assertions.assertEquals(expected, actual);
-
     }
 
     @Test
