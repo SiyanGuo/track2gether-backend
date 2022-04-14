@@ -21,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import javax.security.auth.login.FailedLoginException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -29,6 +28,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+
+import java.util.Optional;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,6 +66,7 @@ class TransactionServiceImpTest {
         fakeuser.setPassword("lixy123");
 
         // Category fakecat = new Category();
+
         fakecat.setId(6);
         fakecat.setCategoryname("food");
         fakecat.setTranstype(new Transactiontype(2, "expenses"));
@@ -75,6 +78,7 @@ class TransactionServiceImpTest {
          */
 
         //  Transaction faketransaction = new Transaction();
+
         faketransaction.setId(1);
         faketransaction.setDate(df.parse("12/12/2022"));
         faketransaction.setAmount(2000);
@@ -84,6 +88,7 @@ class TransactionServiceImpTest {
         faketransaction.setCategory(fakecat);
 
         // Transactiondto fakedto = new Transactiondto();
+
         fakedto.setId(1);
         fakedto.setEmail("abc.j8@gmail.com");
         fakedto.setLastname("mat");
@@ -110,9 +115,6 @@ class TransactionServiceImpTest {
         fakeTransDto.add(new Transactiondto(2, 300, "12/01/2022", 6,
                 "grocery shopping", "food", fakecat.getTranstype().getType(), 1, "lixy",
                 "mat", "abc.j8@gmail.com", false));
-
-
-
     }
 
     @Test
@@ -121,8 +123,9 @@ class TransactionServiceImpTest {
 
         Transactiondto actualdto = transserviceImp.addTransaction(faketransaction);
         Transactiondto expected = fakedto;
-        Assertions.assertEquals(expected,actualdto);
-    }
+         Assertions.assertEquals(expected,actualdto);
+}
+
     @Test
     public void findByUserTest() {
 
@@ -149,31 +152,29 @@ class TransactionServiceImpTest {
 
     @Test
     void findByTransactions() {
-
         when(transrepo.findByTransactions(eq(2022), eq(12), eq(fakeuser))).thenReturn(fakeTransactions);
 
         List<Transactiondto> actual = transserviceImp.findByTransactions(2022, 12, fakeuser);
         List<Transactiondto> expected = new ArrayList<>(fakeTransDto);
 
         Assertions.assertEquals(expected, actual);
-
     }
 
     @Test
     void updateTransaction() throws BadParameterException {
-      /* when(transrepo.findById(111).get()).thenReturn(faketransaction);
+        int i=1;
+        when(transrepo.findById(i)).thenReturn(Optional.ofNullable(faketransaction));
         Mockito.lenient().when(transrepo.save(faketransaction)).thenReturn(faketransaction);
         Transactiondto actualdto = transserviceImp.updateTransaction(faketransaction);
         Transactiondto expected = fakedto;
-        Assertions.assertEquals(expected, actualdto);*/
+        Assertions.assertEquals(expected, actualdto);
     }
 
     @Test
     void deleteTransactionById() {
-      /*  when(transrepo.findById(111).get()).thenReturn(faketransaction);
-        when(transrepo.delete()).getMock(tr))
-        Assertions.assertEquals(transrepo.delete(faketransaction),transserviceImp.deleteTransactionById(1));*/
-
+       // int i=1;
+        //when(transrepo.getById(i)).thenReturn(faketransaction);
+        //Mockito.lenient().when(transrepo.delete(faketransaction)).thenReturn()
     }
 
     @Test

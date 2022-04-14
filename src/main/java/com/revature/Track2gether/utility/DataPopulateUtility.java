@@ -39,7 +39,9 @@ public class DataPopulateUtility {
         expense.setType("expenses");
         em.persist(expense);
 
-        //Category
+
+    //Category
+
 
         Category salary =new Category();
         salary.setCategoryname("salary");
@@ -87,17 +89,17 @@ public class DataPopulateUtility {
         em.persist(clothing);
 
         Users user1 = new Users();
-        user1.setFirstname("soma");
-        user1.setLastname("jan");
-        user1.setEmail("soma.j8@gmail.com");
-        user1.setPassword("soma123");
+        user1.setFirstname("John");
+        user1.setLastname("Doe");
+        user1.setEmail("john@gmail.com");
+        user1.setPassword("john123");
         em.persist(user1);
 
         Users user2 = new Users();
-        user2.setFirstname("lixy");
-        user2.setLastname("mat");
-        user2.setEmail("abc.j8@gmail.com");
-        user2.setPassword("lixy123");
+        user2.setFirstname("Emma");
+        user2.setLastname("John");
+        user2.setEmail("emma@gmail.com");
+        user2.setPassword("emma123");
         em.persist(user2);
 
         user2.setSpouseId(user1);
@@ -352,7 +354,86 @@ public class DataPopulateUtility {
 
 
 
+        String aprDate7 = "05/12/2022";
+        Date aprDt7 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate7);
+
+        Transaction aprTrans7 = new Transaction();
+        aprTrans7.setAmount(2000);
+        aprTrans7.setDate(aprDt6);
+        aprTrans7.setDescription("New kitchen appliance");
+        aprTrans7.setShared(false);
+        aprTrans7.setCategory(utilities);
+        aprTrans7.setUser(user1);
+        em.persist(aprTrans7);
+
+
+        String aprDate8 = "01/01/2022";
+        Date aprDt8 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate8);
+
+        Transaction aprTrans8 = new Transaction();
+        aprTrans8.setAmount(1000);
+        aprTrans8.setDate(aprDt6);
+        aprTrans8.setDescription("New cloth from zara");
+        aprTrans8.setShared(false);
+        aprTrans8.setCategory(clothing);
+        aprTrans8.setUser(user2);
+        em.persist(aprTrans8);
+
+        String aprDate9 = "22/01/2022";
+        Date aprDt9 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate9);
+
+        Transaction aprTrans9 = new Transaction();
+        aprTrans9.setAmount(80);
+        aprTrans9.setDate(aprDt6);
+        aprTrans9.setDescription("took uber to airport");
+        aprTrans9.setShared(false);
+        aprTrans9.setCategory(transportation);
+        aprTrans9.setUser(user2);
+        em.persist(aprTrans9);
+
+
+        String aprDate10 = "10/02/2022";
+        Date aprDt10 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate10);
+
+        Transaction aprTrans10 = new Transaction();
+        aprTrans10.setAmount(1000);
+        aprTrans10.setDate(aprDt6);
+        aprTrans10.setDescription("party at home");
+        aprTrans10.setShared(false);
+        aprTrans10.setCategory(other);
+        aprTrans10.setUser(user2);
+        em.persist(aprTrans10);
+
+        String aprDate11 = "11/02/2022";
+        Date aprDt11 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate11);
+
+        Transaction aprTrans11 = new Transaction();
+        aprTrans11.setAmount(200);
+        aprTrans11.setDate(aprDt6);
+        aprTrans11.setDescription("got  bonus");
+        aprTrans11.setShared(false);
+        aprTrans11.setCategory(salary);
+        aprTrans11.setUser(user2);
+        em.persist(aprTrans11);
+
+
+        String aprDate12 = "11/02/2022";
+        Date aprDt12 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate11);
+
+        Transaction aprTrans12 = new Transaction();
+        aprTrans12.setAmount(500);
+        aprTrans12.setDate(aprDt6);
+        aprTrans12.setDescription("birthday food ordered");
+        aprTrans12.setShared(false);
+        aprTrans12.setCategory(food);
+        aprTrans12.setUser(user2);
+        em.persist(aprTrans12);
+
+
+
+
 
 
     }
 }
+

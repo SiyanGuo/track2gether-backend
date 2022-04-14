@@ -148,7 +148,7 @@ public class ProductionController {
             transadd.setShared(dto.isShared());
             try {
                 UserJwtDto userdto = jwtService.parseJwt(jwt);
-                if(userdto.getUserId()==user.getId())
+                if(userdto.getUserId()==user.getId()|| userdto.getSpouseId().getId()==user.getId())
                 {    dto = transactionservice.addTransaction(transadd);
                     System.out.println(userdto);
                     return ResponseEntity.ok(dto);}
@@ -227,48 +227,45 @@ public class ProductionController {
 
     }
 
+    /*___________________________________*/
+    @PutMapping("/users/{userid}/transaction/{id}")
+    public ResponseEntity<?> updateTransaction(@RequestHeader("Authorization")String headerValue,@PathVariable("userid") String userid,@PathVariable("id") String id,@RequestBody Transactiondto dto) throws ParseException, BadParameterException {
 
-        /*___________________________________*/
-        @PutMapping("/users/{userid}/transaction/{id}")
-        public ResponseEntity<?> updateTransaction(@RequestHeader("Authorization")String headerValue,@PathVariable("userid") String userid,@PathVariable("id") String id,@RequestBody Transactiondto dto) throws ParseException, BadParameterException {
+        try {
+            logger.info("Update transaction of a user...");
+            Transaction transadd = new Transaction();
+            Users user = userservice.getUserById(Integer.parseInt(userid));
+            Category category = catrepo.getById(dto.getCategoryid());
+            transadd.setId(Integer.parseInt(id));
+            Date dt = df.parse(dto.getDate());
+            transadd.setAmount(dto.getAmount());
+            transadd.setDate(dt);
+            transadd.setDescription(dto.getDescription());
+            transadd.setUser(user);
+            transadd.setCategory(category);
+            transadd.setShared(dto.isShared());
+            String jwt = headerValue.split(" ")[1];
+            try {
+                UserJwtDto userdto = jwtService.parseJwt(jwt);
+                if (userdto.getUserId() == user.getId()) {
+                    Transactiondto newtrans = transactionservice.updateTransaction(transadd);
+                    return ResponseEntity.ok(newtrans);
+                } else {
 
-            try{
-                logger.info("Update transaction of a user...");
-                Transaction transadd = new Transaction();
-                Users user = userservice.getUserById(Integer.parseInt(userid));
-                Category category = catrepo.getById(dto.getCategoryid());
-                transadd.setId(Integer.parseInt(id));
-                Date dt = df.parse(dto.getDate());
-                transadd.setAmount(dto.getAmount());
-                transadd.setDate(dt);
-                transadd.setDescription(dto.getDescription());
-                transadd.setUser(user);
-                transadd.setCategory(category);
-                transadd.setShared(dto.isShared());
-                String jwt = headerValue.split(" ")[1];
-                try {
-                    UserJwtDto userdto = jwtService.parseJwt(jwt);
-                    if(userdto.getUserId()==user.getId()) {
-                        Transactiondto newtrans = transactionservice.updateTransaction(transadd);
-                        return ResponseEntity.ok(newtrans);
-                    }else{
+                    return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
+                }
 
-                        return ResponseEntity.status(401).body("You are not allowed to access this endpoint ");
-                    }
+            } catch (JsonProcessingException e) {
+                return ResponseEntity.status(401).body(e.getMessage());
 
-                }catch (JsonProcessingException e) {
-                    return ResponseEntity.status(401).body(e.getMessage());
-
-                }}catch (Exception e) {
-                return ResponseEntity.status(401).body(e.getMessage()+"Please validate input");}
-
-
-
-
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(e.getMessage() + "Please validate input");
         }
+    }
         /*___________________________________*/
         @GetMapping("/category")
-        public ResponseEntity<?> getAllCategory(@RequestParam("type") int transid)
+        public ResponseEntity<?> getAllCategory ( @RequestParam("type") int transid)
 
         {
             logger.info("Get all Category...");
@@ -278,7 +275,9 @@ public class ProductionController {
 
 
         @DeleteMapping("/users/{userid}/transaction/{id}")
-        public ResponseEntity<?> deleteTransaction(@RequestHeader("Authorization")String headerValue,@PathVariable("userid") String userid,@PathVariable("id") String id) throws EntityNotFoundException, BadParameterException {
+        public ResponseEntity<?> deleteTransaction (@RequestHeader("Authorization") String
+        headerValue, @PathVariable("userid") String userid, @PathVariable("id") String id) throws
+        EntityNotFoundException, BadParameterException {
             try {
                 logger.info("Deleting transaction of a user...");
                 int transid = Integer.parseInt(id);

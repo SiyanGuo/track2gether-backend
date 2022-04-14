@@ -18,6 +18,7 @@ public interface TransactionService {
 
     public List<Transactiondto> findByTransactions(int year,int month, Users user);
 
+
     public Transactiondto updateTransaction(Transaction transaction) throws BadParameterException;
 
     public List<Categorydto> findByCategoryBytranstype(int transtype);

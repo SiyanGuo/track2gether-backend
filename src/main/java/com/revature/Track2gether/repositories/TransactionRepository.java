@@ -19,4 +19,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
    @Query("select t from Transaction t where year(t.date)=?1 and month(t.date)=?2 and t.user=?3")
    public List<Transaction> findByTransactions(int year,int month,Users user);
 
+
 }
