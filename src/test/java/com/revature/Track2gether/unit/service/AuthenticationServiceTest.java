@@ -63,7 +63,7 @@ public class AuthenticationServiceTest {
 
     }
 
-    @Test
+   @Test
     @Timeout(value = 5000, unit = TimeUnit.MILLISECONDS)
     public void test_login_positive_validEmailAndPassword_whitespace() throws
             FailedLoginException, BadParameterException {

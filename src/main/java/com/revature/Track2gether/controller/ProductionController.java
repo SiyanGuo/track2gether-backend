@@ -138,7 +138,7 @@ public class ProductionController {
             transadd.setShared(dto.isShared());
             try {
                 UserJwtDto userdto = jwtService.parseJwt(jwt);
-                if(userdto.getUserId()==user.getId())
+                if(userdto.getUserId()==user.getId()|| userdto.getSpouseId().getId()==user.getId())
                 {    dto = transactionservice.addTransaction(transadd);
                     System.out.println(userdto);
                     return ResponseEntity.ok(dto);}
