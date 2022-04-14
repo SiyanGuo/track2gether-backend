@@ -11,13 +11,8 @@ import java.util.List;
 
 public interface UserService {
 
-    public SignUpDTO addUser(Users user);
+    public Users addUser(Users user) throws BadParameterException;
 
     public Users getUserById(int id) throws BadParameterException;
 
-    public List<Users> getAll();
-
-    public Users UpdateUsers(Users user);
-
-    public void deleteUsersById(int id);
 }
