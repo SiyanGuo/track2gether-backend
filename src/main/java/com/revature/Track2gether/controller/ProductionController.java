@@ -60,59 +60,43 @@ public class ProductionController {
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
     @PostMapping("/signUp")
-    public ResponseEntity<?> signUp(@RequestBody Users user) throws BadParameterException {
+    public ResponseEntity<?> signUp(@RequestBody Users user, Users user2) throws BadParameterException {
 
-        /*
-        Users newUser2 = new Users();
-
-        newUser1.setFirstname(sdto.getFirstName());
-        newUser1.setLastname(sdto.getLastName());
-        newUser1.setEmail(sdto.getEmail());
-        newUser1.setPassword(sdto.getPassword());
-
-         */
         Users newUser = new Users();
         newUser.setFirstname(user.getFirstname());
         newUser.setLastname(user.getLastname());
         newUser.setEmail(user.getEmail());
         newUser.setPassword(user.getPassword());
 
-        /*
+        Users added1 = userservice.addUser(newUser);
+
         Users spouse = new Users();
-        spouse.setFirstname(user.getFirstname());
-        spouse.setLastname(user.getLastname());
-        spouse.setEmail(user.getEmail());
-        spouse.setPassword(user.getPassword());
-        newUser.setSpouseId(new Users(spouse_id , spouse.getFirstname(),
-                spouse.getLastname(), spouse.getEmail(), spouse.getPassword(), newUser));
-         */
-        /*
+        spouse.setFirstname(user2.getFirstname());
+        spouse.setLastname(user2.getLastname());
+        spouse.setEmail(user2.getEmail());
+        spouse.setPassword(user2.getPassword());
 
-        newUser.setSpouseId(spouse.getSpouseId());
-        spouse.setSpouseId(newUser.getSpouseId());
+        Users added2 = userservice.addUser(spouse);
 
-         */
+        int newUserId = added1.getId();
+        int spouse_id = newUserId + 1;
+
+        newUser.setSpouseId(new Users(spouse_id, added2.getFirstname(), added2.getLastname(),
+                added2.getEmail(), added2.getPassword(), added1));
+
         System.out.println(newUser.getFirstname());
         System.out.println(newUser.getLastname());
         System.out.println(newUser.getEmail());
         System.out.println(newUser.getPassword());
+
+        System.out.println(added1.getId());
+        System.out.println(added1.getSpouseId());
+        System.out.println(added2.getId());
+        System.out.println(added2.getSpouseId());
         System.out.println(newUser.getSpouseId());
+        System.out.println(spouse.getSpouseId());
 
-        Users added = userservice.addUser(user);
-
-        int newUserId = added.getId();
-        int spouse_id = newUserId + 1;
-
-        newUser.setSpouseId(new Users(spouse_id, added.getFirstname(), added.getLastname(),
-                added. getEmail(), added.getPassword(), added));
-
-        System.out.println(added.getId());
-        System.out.println(added.getSpouseId());
-        System.out.println(newUser.getSpouseId());
-
-
-        return ResponseEntity.ok(added);
-
+        return ResponseEntity.ok(added1);
 
     }
 
@@ -144,22 +128,6 @@ public class ProductionController {
         } catch (BadParameterException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<?> test(@RequestHeader("Authorization") String headerValue) throws JsonProcessingException {
-        // Bearer <token>
-        String jwt = headerValue.split(" ")[1];
-
-        try {
-
-            UserJwtDto dto = jwtService.parseJwt(jwt);
-
-            return ResponseEntity.ok(dto);
-        } catch (MalformedJwtException e) {
-            return ResponseEntity.status(401).body(e.getMessage());
-        }
-
     }
 
     @PostMapping("/users/{userid}/transaction")

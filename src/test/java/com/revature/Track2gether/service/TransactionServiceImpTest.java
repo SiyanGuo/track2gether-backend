@@ -53,6 +53,8 @@ class TransactionServiceImpTest {
     Transactiondto fakedto = new Transactiondto();
     List<Transaction> fakeTransactions = new ArrayList<>();
     List<Transactiondto> fakeTransDto = new ArrayList<>();
+    //Transactiontype fakeTransType = new Transactiontype();
+
 
     @BeforeEach
     public void setup() throws ParseException {
@@ -67,9 +69,13 @@ class TransactionServiceImpTest {
 
         fakecat.setId(6);
         fakecat.setCategoryname("food");
-        fakecat.setTranstype(new Transactiontype(6, "expenses"));
+        fakecat.setTranstype(new Transactiontype(2, "expenses"));
 
-
+        /*
+        // Fake Transaction Type
+        fakeTransType.setId(2);
+        fakeTransType.setType("expenses");
+         */
 
         //  Transaction faketransaction = new Transaction();
 
@@ -89,7 +95,7 @@ class TransactionServiceImpTest {
         fakedto.setFirstname("lixy");
         fakedto.setShared(true);
         fakedto.setAmount(2000);
-        fakedto.setCategoryType("expenses");
+        fakedto.setCategoryType(fakecat.getTranstype().getType());
         fakedto.setCategoryname("food");
         fakedto.setUserid(1);
         fakedto.setCategoryid(6);
@@ -104,13 +110,11 @@ class TransactionServiceImpTest {
 
         // Fake Transaction DTO List for fakeuser
         fakeTransDto.add(new Transactiondto(1, 2000, "12/12/2022", 6,
-                "expense added", "food", "expenses", 1, "lixy",
+                "expense added", "food", fakecat.getTranstype().getType(), 1, "lixy",
                 "mat", "abc.j8@gmail.com", true));
         fakeTransDto.add(new Transactiondto(2, 300, "12/01/2022", 6,
-                "grocery shopping", "food", "expenses", 1, "lixy",
+                "grocery shopping", "food", fakecat.getTranstype().getType(), 1, "lixy",
                 "mat", "abc.j8@gmail.com", false));
-
-
     }
 
     @Test

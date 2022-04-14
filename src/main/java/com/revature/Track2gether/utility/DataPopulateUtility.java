@@ -180,6 +180,54 @@ public class DataPopulateUtility {
         marchTrans6.setUser(user1);
         em.persist(marchTrans6);
 
+        String marDate7 = "03/11/2022";
+        Date marDt7 = new SimpleDateFormat("MM/dd/yyyy").parse(marDate7);
+
+        Transaction marchTrans7 = new Transaction();
+        marchTrans7.setAmount(2300.67);
+        marchTrans7.setDate(marDt7);
+        marchTrans7.setDescription("Bi Weekly Salary");
+        marchTrans7.setShared(false);
+        marchTrans7.setCategory(salary);
+        marchTrans7.setUser(user2);
+        em.persist(marchTrans7);
+
+        String marDate8 = "03/25/2022";
+        Date marDt8 = new SimpleDateFormat("MM/dd/yyyy").parse(marDate8);
+
+        Transaction marchTrans8 = new Transaction();
+        marchTrans8.setAmount(2300.67);
+        marchTrans8.setDate(marDt8);
+        marchTrans8.setDescription("Bi Weekly Salary");
+        marchTrans8.setShared(false);
+        marchTrans8.setCategory(salary);
+        marchTrans8.setUser(user2);
+        em.persist(marchTrans8);
+
+        String marDate9 = "03/12/2022";
+        Date marDt9 = new SimpleDateFormat("MM/dd/yyyy").parse(marDate9);
+
+        Transaction marchTrans9 = new Transaction();
+        marchTrans9.setAmount(67.89);
+        marchTrans9.setDate(marDt9);
+        marchTrans9.setDescription("Gas");
+        marchTrans9.setShared(false);
+        marchTrans9.setCategory(transportation);
+        marchTrans9.setUser(user2);
+        em.persist(marchTrans9);
+
+        String marDate10 = "03/13/2022";
+        Date marDt10 = new SimpleDateFormat("MM/dd/yyyy").parse(marDate10);
+
+        Transaction marchTrans10 = new Transaction();
+        marchTrans10.setAmount(137.63);
+        marchTrans10.setDate(marDt10);
+        marchTrans10.setDescription("Dinner");
+        marchTrans10.setShared(false);
+        marchTrans10.setCategory(food);
+        marchTrans10.setUser(user2);
+        em.persist(marchTrans10);
+
 
 
         String aprDate1 = "04/11/2022";
@@ -194,7 +242,7 @@ public class DataPopulateUtility {
         aprTrans1.setUser(user1);
         em.persist(aprTrans1);
 
-        String aprDate2 = "04/2/2022";
+        String aprDate2 = "04/02/2022";
         Date aprDt2 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate2);
 
         Transaction aprTrans2 = new Transaction();
@@ -253,6 +301,56 @@ public class DataPopulateUtility {
         aprTrans6.setCategory(investment);
         aprTrans6.setUser(user1);
         em.persist(aprTrans6);
+
+        String aprDate7 = "04/08/2022";
+        Date aprDt7 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate7);
+
+        Transaction aprTrans7 = new Transaction();
+        aprTrans7.setAmount(2300.67);
+        aprTrans7.setDate(aprDt7);
+        aprTrans7.setDescription("Bi Weekly Salary");
+        aprTrans7.setShared(false);
+        aprTrans7.setCategory(salary);
+        aprTrans7.setUser(user2);
+        em.persist(aprTrans7);
+
+        String aprDate8 = "04/22/2022";
+        Date aprDt8 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate8);
+
+        Transaction aprTrans8 = new Transaction();
+        aprTrans8.setAmount(2300.67);
+        aprTrans8.setDate(aprDt8);
+        aprTrans8.setDescription("Bi Weekly Salary");
+        aprTrans8.setShared(false);
+        aprTrans8.setCategory(salary);
+        aprTrans8.setUser(user2);
+        em.persist(aprTrans8);
+
+        String aprDate9 = "04/30/2022";
+        Date aprDt9 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate9);
+
+        Transaction aprTrans9 = new Transaction();
+        aprTrans9.setAmount(128.89);
+        aprTrans9.setDate(aprDt9);
+        aprTrans9.setDescription("Electric Bill");
+        aprTrans9.setShared(false);
+        aprTrans9.setCategory(utilities);
+        aprTrans9.setUser(user2);
+        em.persist(aprTrans9);
+
+        String aprDate10 = "04/29/2022";
+        Date aprDt10 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate10);
+
+        Transaction aprTrans10 = new Transaction();
+        aprTrans10.setAmount(378.89);
+        aprTrans10.setDate(aprDt9);
+        aprTrans10.setDescription("Spring clothing shopping");
+        aprTrans10.setShared(false);
+        aprTrans10.setCategory(clothing);
+        aprTrans10.setUser(user2);
+        em.persist(aprTrans10);
+
+
 
 
 
