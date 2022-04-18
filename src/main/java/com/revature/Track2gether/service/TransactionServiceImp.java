@@ -105,11 +105,10 @@ public class TransactionServiceImp implements TransactionService {
 
     @Override
     public Transactiondto updateTransaction(Transaction t) throws BadParameterException {
-        if(t.getAmount()<=0)
-        {
+        if (t.getAmount() <= 0) {
             throw new BadParameterException("Enter a valid amount");
-        }if(t.getDate()==null)
-        {
+        }
+        if (t.getDate() == null) {
             throw new BadParameterException("Enter a valid date");
         }
 

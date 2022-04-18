@@ -138,17 +138,17 @@ class TransactionServiceImpTest {
 
     }
 
-    @Test
-    void findByTransactiontype() throws BadParameterException {
-
-        when(transrepo.findByTransactiontype(eq(fakeuser), eq(fakecat.getTranstype().getId()))).thenReturn(fakeTransactions);
-
-        List<Transactiondto> actual = transserviceImp.findByTransactiontype(fakeuser, fakecat.getTranstype().getId());
-        List<Transactiondto> expected = new ArrayList<>(fakeTransDto);
-
-        Assertions.assertEquals(expected, actual);
-
-    }
+//    @Test
+//    void findByTransactiontype() throws BadParameterException {
+//
+//        when(transrepo.findByTransactiontype(eq(fakeuser), eq(fakecat.getTranstype().getId()))).thenReturn(fakeTransactions);
+//
+//        List<Transactiondto> actual = transserviceImp.findByTransactiontype(fakeuser, fakecat.getTranstype().getId());
+//        List<Transactiondto> expected = new ArrayList<>(fakeTransDto);
+//
+//        Assertions.assertEquals(expected, actual);
+//
+//    }
 
     @Test
     void findByTransactions() {
@@ -177,7 +177,4 @@ class TransactionServiceImpTest {
         //Mockito.lenient().when(transrepo.delete(faketransaction)).thenReturn()
     }
 
-    @Test
-    void findByCategoryBytranstype() {
-    }
 }
