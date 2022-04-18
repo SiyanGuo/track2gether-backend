@@ -22,6 +22,7 @@ public class Track2getherApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(Track2getherApplication.class, args);
 	}
+
 	@Bean
 	@Profile("prod")
 	public CommandLineRunner test() {

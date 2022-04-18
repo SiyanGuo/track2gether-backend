@@ -20,15 +20,6 @@ public class DataPopulateUtility {
     @PersistenceContext
     private EntityManager em;
 
-    /*
-    @Autowired
-    DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-
-
-     */
-
-
-
     @Transactional
     public void populateIntialData() throws ParseException {
         Transactiontype income =new Transactiontype();
@@ -39,9 +30,7 @@ public class DataPopulateUtility {
         expense.setType("expenses");
         em.persist(expense);
 
-
-    //Category
-
+        //Category
 
         Category salary =new Category();
         salary.setCategoryname("salary");
@@ -350,90 +339,77 @@ public class DataPopulateUtility {
         aprTrans10.setUser(user2);
         em.persist(aprTrans10);
 
-
-
-
-
-        String aprDate7 = "05/12/2022";
-        Date aprDt7 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate7);
-
-        Transaction aprTrans7 = new Transaction();
-        aprTrans7.setAmount(2000);
-        aprTrans7.setDate(aprDt6);
-        aprTrans7.setDescription("New kitchen appliance");
-        aprTrans7.setShared(false);
-        aprTrans7.setCategory(utilities);
-        aprTrans7.setUser(user1);
-        em.persist(aprTrans7);
-
-
-        String aprDate8 = "01/01/2022";
-        Date aprDt8 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate8);
-
-        Transaction aprTrans8 = new Transaction();
-        aprTrans8.setAmount(1000);
-        aprTrans8.setDate(aprDt6);
-        aprTrans8.setDescription("New cloth from zara");
-        aprTrans8.setShared(false);
-        aprTrans8.setCategory(clothing);
-        aprTrans8.setUser(user2);
-        em.persist(aprTrans8);
-
-        String aprDate9 = "22/01/2022";
-        Date aprDt9 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate9);
-
-        Transaction aprTrans9 = new Transaction();
-        aprTrans9.setAmount(80);
-        aprTrans9.setDate(aprDt6);
-        aprTrans9.setDescription("took uber to airport");
-        aprTrans9.setShared(false);
-        aprTrans9.setCategory(transportation);
-        aprTrans9.setUser(user2);
-        em.persist(aprTrans9);
-
-
-        String aprDate10 = "10/02/2022";
-        Date aprDt10 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate10);
-
-        Transaction aprTrans10 = new Transaction();
-        aprTrans10.setAmount(1000);
-        aprTrans10.setDate(aprDt6);
-        aprTrans10.setDescription("party at home");
-        aprTrans10.setShared(false);
-        aprTrans10.setCategory(other);
-        aprTrans10.setUser(user2);
-        em.persist(aprTrans10);
-
-        String aprDate11 = "11/02/2022";
+        String aprDate11 = "05/12/2022";
         Date aprDt11 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate11);
 
         Transaction aprTrans11 = new Transaction();
-        aprTrans11.setAmount(200);
-        aprTrans11.setDate(aprDt6);
-        aprTrans11.setDescription("got  bonus");
+        aprTrans11.setAmount(2000);
+        aprTrans11.setDate(aprDt11);
+        aprTrans11.setDescription("New kitchen appliance");
         aprTrans11.setShared(false);
-        aprTrans11.setCategory(salary);
-        aprTrans11.setUser(user2);
+        aprTrans11.setCategory(utilities);
+        aprTrans11.setUser(user1);
         em.persist(aprTrans11);
 
-
-        String aprDate12 = "11/02/2022";
-        Date aprDt12 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate11);
+        String aprDate12 = "01/01/2022";
+        Date aprDt12 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate12);
 
         Transaction aprTrans12 = new Transaction();
-        aprTrans12.setAmount(500);
-        aprTrans12.setDate(aprDt6);
-        aprTrans12.setDescription("birthday food ordered");
+        aprTrans12.setAmount(1000);
+        aprTrans12.setDate(aprDt12);
+        aprTrans12.setDescription("New cloth from zara");
         aprTrans12.setShared(false);
-        aprTrans12.setCategory(food);
+        aprTrans12.setCategory(clothing);
         aprTrans12.setUser(user2);
         em.persist(aprTrans12);
 
+        String aprDate13 = "01/22/2022";
+        Date aprDt13 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate13);
+
+        Transaction aprTrans13 = new Transaction();
+        aprTrans13.setAmount(80);
+        aprTrans13.setDate(aprDt13);
+        aprTrans13.setDescription("took uber to airport");
+        aprTrans13.setShared(false);
+        aprTrans13.setCategory(transportation);
+        aprTrans13.setUser(user2);
+        em.persist(aprTrans13);
+
+        String aprDate14 = "10/02/2022";
+        Date aprDt14 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate14);
+
+        Transaction aprTrans14 = new Transaction();
+        aprTrans14.setAmount(1000);
+        aprTrans14.setDate(aprDt14);
+        aprTrans14.setDescription("party at home");
+        aprTrans14.setShared(false);
+        aprTrans14.setCategory(other);
+        aprTrans14.setUser(user2);
+        em.persist(aprTrans14);
+
+        String aprDate15 = "11/02/2022";
+        Date aprDt15 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate15);
+
+        Transaction aprTrans15 = new Transaction();
+        aprTrans15.setAmount(200);
+        aprTrans15.setDate(aprDt15);
+        aprTrans15.setDescription("got bonus");
+        aprTrans15.setShared(false);
+        aprTrans15.setCategory(salary);
+        aprTrans15.setUser(user2);
+        em.persist(aprTrans15);
 
 
+        String aprDate16 = "11/02/2022";
+        Date aprDt16 = new SimpleDateFormat("MM/dd/yyyy").parse(aprDate16);
 
-
-
+        Transaction aprTrans16 = new Transaction();
+        aprTrans16.setAmount(500);
+        aprTrans16.setDate(aprDt16);
+        aprTrans16.setDescription("birthday food ordered");
+        aprTrans16.setShared(false);
+        aprTrans16.setCategory(food);
+        aprTrans16.setUser(user2);
+        em.persist(aprTrans16);
     }
 }
-
