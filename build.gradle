@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.6.6'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+    id 'jacoco'
 }
 jar{
 	manifest {
@@ -16,7 +17,16 @@ sourceCompatibility = '1.8'
 repositories {
 	mavenCentral()
 }
-
+jacoco{
+    toolVersion="0.8.7"
+    reportsDirectory =file("$buildDir/jacoco")
+}
+test{
+	finalizedBy jacocoTestReport
+}
+jacocoTestReport{
+		dependsOn test
+}
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
