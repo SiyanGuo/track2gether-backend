@@ -28,7 +28,7 @@ To-do list:
 
 ## Getting Started
 
-git clone https://github.com/jshim0209/Expense-Reimbursement-System.git
+git clone https://github.com/SiyanGuo/track2gether-backend.git
 
 ## Contributors
 
