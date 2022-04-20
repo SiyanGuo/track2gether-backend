@@ -6,6 +6,9 @@ Track2gether, a budget tracker, is an application that helps to keep an accurate
 It allows you to monitor and categorize your income sources and expenses. 
 Without the help of a fancy financial planner, we provide an easy and light way to monitor and track your income and expenses for you to have a better idea of you and your partner’s financial status by providing visualized data on financial history.
 
+## Track2gether Frontend Repo
+[Frontend repo](https://github.com/SiyanGuo/track2gether-frontend)
+
 ## Technologies Used
 
 * Spring MVC
